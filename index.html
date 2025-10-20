@@ -2,7 +2,7 @@
 <html lang="ta">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale-1.0">
     <title>கோவை - திருப்பதி ஆன்மிகப் பெருவழி</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -11,6 +11,16 @@
     <style>
         body {
             font-family: 'Noto Sans Tamil', sans-serif;
+        }
+        .visited-card {
+            background-color: #F0FFF4; /* A light green tint */
+        }
+        .plan-included {
+            border-left: 5px solid #4CAF50; /* Green */
+        }
+        .plan-excluded {
+            border-left: 5px solid #F44336; /* Red */
+            opacity: 0.8;
         }
     </style>
 </head>
@@ -22,19 +32,22 @@
     </header>
 
     <!-- Google Maps Integration --><section class="text-center py-6 px-4 bg-amber-100">
-        <h2 class="text-xl sm:text-2xl font-bold text-orange-800 mb-3">பயணத் திட்டம்</h2>
-        <p class="mb-4 max-w-2xl mx-auto text-sm sm:text-base">உங்கள் ஆன்மிகப் பயணத்தை எளிதாக்க, வழியில் உள்ள அனைத்து முக்கிய கோவில்களையும் ஒரே வரைபடத்தில் காண்க.</p>
-        <a href="https://www.google.com/maps/dir/Coimbatore/Marudhamalai+Subramanya+Swamy+Temple/Perur+Pateeswarar+Temple/Avinashi+Lingeswarar+Temple/Bhavani+Sangameswarar+Temple/Sugavaneswarar+Temple,+Salem/Kottai+Mariamman+Temple,+Salem/Kailasanathar+Temple,+Tharamangalam/Anjaneyar+Temple,+Namakkal+Fort/Arapaleeswarar+Temple,+Kolli+Hills/Pasupatheswarar+Temple,+Karur/Arunachaleswarar+Temple,+Tiruvannamalai/Pachaiamman+Kovil,+Tiruvannamalai/Adi+Annamalai+Temple/Jalakandeswarar+Temple,+Vellore/Sripuram+Golden+Temple/Srikalahasti+Temple/Padmavathi+Ammavari+Temple,+Tiruchanur/Sri+Venkateswara+Swamy+Temple,+Tirumala" target="_blank" class="inline-block bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-5 rounded-lg transition-colors duration-300 shadow-md text-sm sm:text-base">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 sm:h-6 sm:w-6 inline-block mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l5.447 2.724A1 1 0 0021 16.382V5.618a1 1 0 00-1.447-.894L15 7m-6 3l6-3" />
-            </svg>
-            அனைத்து கோவில்களையும் வரைபடத்தில் காண்க
-        </a>
+        <h2 class="text-xl sm:text-2xl font-bold text-orange-800 mb-4">உங்கள் பயணத்தைத் திட்டமிடுங்கள்</h2>
+        <div class="flex flex-wrap justify-center items-center gap-4">
+             <button id="make-plan-btn" class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-5 rounded-lg transition-colors duration-300 shadow-md text-sm sm:text-base">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 sm:h-6 sm:w-6 inline-block mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l5.447 2.724A1 1 0 0021 16.382V5.618a1 1 0 00-1.447-.894L15 7m-6 3l6-3"></path></svg>
+                பயணத் திட்டம் உருவாக்குக
+            </button>
+             <button id="reset-btn" class="inline-block bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-5 rounded-lg transition-colors duration-300 shadow-md text-sm sm:text-base">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 sm:h-6 sm:w-6 inline-block mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h5M20 20v-5h-5M4 4l16 16"></path></svg>
+                மீட்டமை
+            </button>
+        </div>
     </section>
 
     <!-- Main Content with Timeline --><main class="container mx-auto px-2 sm:px-4 py-8">
         <div class="relative wrap overflow-hidden p-2 md:p-10 h-full">
-            <!-- The vertical line is removed here --><!-- Temple Cards --><div id="timeline-content" class="flex flex-col items-center">
+            <!-- Temple Cards --><div id="timeline-content" class="flex flex-col items-center">
                 
                 <!-- Helper function to create a map button --><template id="map-button">
                     <a target="_blank" class="inline-flex items-center mt-4 bg-orange-600 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded-lg transition-colors duration-300 text-sm">
@@ -45,24 +58,24 @@
                 
                 <script>
                     const temples = [
-                        { name: "Marudhamalai Subramanya Swamy Temple", location: "Coimbatore", desc: "முருகனின் ஏழாம் படைவீடாகக் கருதப்படும் சிறப்புமிக்க தலம்; மூலிகை வளம் நிறைந்த மலைக்கோவில்.", mapUrl: "https://maps.google.com/?q=Marudhamalai+Subramanya+Swamy+Temple+Coimbatore" },
-                        { name: "Perur Pateeswarar Temple", location: "Coimbatore", desc: "தேவாரப் பாடல் பெற்ற தலம், 'மேலைச் சிதம்பரம்' எனப் போற்றப்படுகிறது. முக்தி தரும் தலமாக நம்பப்படுகிறது.", mapUrl: "https://maps.google.com/?q=Perur+Pateeswarar+Temple+Coimbatore" },
-                        { name: "Avinashiappar Temple", location: "Avinashi", desc: "சுந்தரரால் முதலை உண்ட பாலகன் உயிர் பெற்ற அற்புதம் நிகழ்ந்த தலம்; 'தென்னகத்து காசி' என சிறப்பு பெற்றது.", mapUrl: "https://maps.google.com/?q=Avinashiappar+Temple+Avinashi" },
-                        { name: "Bhavani Sangameshwarar Temple", location: "Bhavani", desc: "மூன்று புண்ணிய நதிகள் சங்கமிக்கும் 'தென்னகத்தின் பிரயாகை'. இங்கு நீராடி இறைவனை தரிசிப்பது புண்ணியம்.", mapUrl: "https://maps.google.com/?q=Bhavani+Sangameshwarar+Temple+Bhavani" },
-                        { name: "Arapaleeswarar Temple", location: "Kolli Hills (Namakkal District)", desc: "சங்க இலக்கியங்களில் குறிப்பிடப்பட்டுள்ள பழமையான சிவன் கோவில்; ஆகாய கங்கை நீர்வீழ்ச்சிக்கு அருகில் அமைந்துள்ளது.", mapUrl: "https://maps.google.com/?q=Arapaleeswarar+Temple+Kolli+Hills+(Namakkal+District)" },
-                        { name: "Anjaneyar Temple", location: "Namakkal Fort", desc: "18 அடி உயர பிரம்மாண்ட ஒற்றைக்கல் ஆஞ்சநேயர், நரசிம்மரை வணங்கும் கோலத்தில் அருள்பாலிக்கிறார்.", mapUrl: "https://maps.google.com/?q=Anjaneyar+Temple+Namakkal+Fort" },
-                        { name: "Pasupatheswarar Temple", location: "Karur", desc: "காமதேனு வழிபட்ட சிறப்புமிக்க தலம். இங்குள்ள மூலவர் லிங்கம் ஐந்தடி உயரம் கொண்டது.", mapUrl: "https://maps.google.com/?q=Pasupatheswarar+Temple+Karur" },
-                        { name: "Kailasanathar Temple", location: "Tharamangalam (Salem)", desc: "வியக்கவைக்கும் சிற்பக்கலை மற்றும் கட்டடக்கலை அதிசயங்கள் நிறைந்த 10ம் நூற்றாண்டு சோழர் கால கோவில்.", mapUrl: "https://maps.google.com/?q=Kailasanathar+Temple+Tharamangalam+(Salem)" },
-                        { name: "Sugavaneswarar Temple", location: "Salem", desc: "சுகப்பிரம்ம ரிஷியால் வணங்கப்பட்ட பழமையான சிவன் கோவில். அருணகிரிநாதரால் பாடல் பெற்ற தலம்.", mapUrl: "https://maps.google.com/?q=Sugavaneswarar+Temple+Salem" },
-                        { name: "Kottai Mariamman Temple", location: "Salem", desc: "சேலம் மாநகரின் காவல் தெய்வமாக விளங்கும் சக்தி வாய்ந்த அம்மன். ஆடி மாத திருவிழா மிகவும் பிரசித்தி பெற்றது.", mapUrl: "https://maps.google.com/?q=Kottai+Mariamman+Temple+Salem" },
-                        { name: "Arunachaleswarar Temple", location: "Tiruvannamalai", desc: "பஞ்சபூதத் தலங்களில் அக்னியைக் குறிக்கும் தலம்; நினைத்தாலே முக்தி தரும் தலம் எனப் போற்றப்படுகிறது.", mapUrl: "https://maps.google.com/?q=Arunachaleswarar+Temple+Tiruvannamalai" },
-                        { name: "Pachaiamman Temple", location: "Girivalam Path", desc: "கிரிவலப் பாதையில் அமைந்துள்ள இக்கோவில், சிவனின் தவத்திற்கு பார்வதி தேவி உதவிய இடமாகக் கருதப்படுகிறது.", mapUrl: "https://maps.google.com/?q=Pachaiamman+Temple+Girivalam+Path" },
-                        { name: "Adi Annamalai Temple", location: "Tiruvannamalai outskirts", desc: "கிரிவலப் பாதையில் உள்ள இக்கோவில், அண்ணாமலையார் கோவிலை விடப் பழமையானது எனக் கருதப்படுகிறது.", mapUrl: "https://maps.google.com/?q=Adi+Annamalai+Temple+Tiruvannamalai+outskirts" },
-                        { name: "Sripuram Golden Temple", location: "Vellore (Tirumalaikodi)", desc: "சுமார் 1500 கிலோ தங்கத்தால் வேயப்பட்ட விமானம் மற்றும் கோபுரம்; ஆன்மிகப் பயணத்தைக் குறிக்கும் நட்சத்திர வடிவ நடைபாதை.", mapUrl: "https://maps.google.com/?q=Sripuram+Golden+Temple+Vellore+(Tirumalaikodi)" },
-                        { name: "Jalakandeswarar Temple", location: "Inside Vellore Fort", desc: "வேலூர் கோட்டையின் உள்ளே, அகழிக்கு நடுவே அமைந்துள்ள விஜயநகரப் பேரரசின் சிற்பக்கலைக்குச் சிறந்த எடுத்துக்காட்டு.", mapUrl: "https://maps.google.com/?q=Jalakandeswarar+Temple+Inside+Vellore+Fort" },
-                        { name: "Srikalahasteeswara Temple", location: "Srikalahasti", desc: "பஞ்சபூத தலங்களில் வாயுவைக் குறிக்கும் தலம். ராகு-கேது தோஷ நிவர்த்திக்கு மிகவும் பிரசித்தி பெற்றது.", mapUrl: "https://maps.google.com/?q=Srikalahasteeswara+Temple+Srikalahasti" },
-                        { name: "Padmavathi Ammavari Temple", location: "Tiruchanur", desc: "திருமலைக்குச் செல்லும் முன் வெங்கடேஸ்வரரின் துணைவியாரான பத்மாவதி தாயாரை தரிசிப்பது மரபு.", mapUrl: "https://maps.google.com/?q=Padmavathi+Ammavari+Temple+Tiruchanur" },
-                        { name: "Venkateswara Swamy Temple", location: "Tirumala Hills", desc: "நமது பயணத்தின் இலக்கு. கலியுகத்தில் மோட்சம் தரும் தெய்வமாக வணங்கப்படும் ஸ்ரீனிவாசரை தரிசிப்பது பெரும் பாக்கியம்.", mapUrl: "https://maps.google.com/?q=Venkateswara+Swamy+Temple+Tirumala+Hills" }
+                        { name: "Marudhamalai Subramanya Swamy Temple", location: "Coimbatore", desc: "முருகனின் ஏழாம் படைவீடாகக் கருதப்படும் சிறப்புமிக்க தலம்; மூலிகை வளம் நிறைந்த மலைக்கோவில்.", mapQuery: "Marudhamalai Subramanya Swamy Temple Coimbatore", mapUrl: "https://maps.google.com/?q=Marudhamalai+Subramanya+Swamy+Temple+Coimbatore" },
+                        { name: "Perur Pateeswarar Temple", location: "Coimbatore", desc: "தேவாரப் பாடல் பெற்ற தலம், 'மேலைச் சிதம்பரம்' எனப் போற்றப்படுகிறது. முக்தி தரும் தலமாக நம்பப்படுகிறது.", mapQuery: "Perur Pateeswarar Temple Coimbatore", mapUrl: "https://maps.google.com/?q=Perur+Pateeswarar+Temple+Coimbatore" },
+                        { name: "Avinashiappar Temple", location: "Avinashi", desc: "சுந்தரரால் முதலை உண்ட பாலகன் உயிர் பெற்ற அற்புதம் நிகழ்ந்த தலம்; 'தென்னகத்து காசி' என சிறப்பு பெற்றது.", mapQuery: "Avinashiappar Temple Avinashi", mapUrl: "https://maps.google.com/?q=Avinashiappar+Temple+Avinashi" },
+                        { name: "Bhavani Sangameshwarar Temple", location: "Bhavani", desc: "மூன்று புண்ணிய நதிகள் சங்கமிக்கும் 'தென்னகத்தின் பிரயாகை'. இங்கு நீராடி இறைவனை தரிசிப்பது புண்ணியம்.", mapQuery: "Bhavani Sangameshwarar Temple Bhavani", mapUrl: "https://maps.google.com/?q=Bhavani+Sangameshwarar+Temple+Bhavani" },
+                        { name: "Arapaleeswarar Temple", location: "Kolli Hills (Namakkal District)", desc: "சங்க இலக்கியங்களில் குறிப்பிடப்பட்டுள்ள பழமையான சிவன் கோவில்; ஆகாய கங்கை நீர்வீழ்ச்சிக்கு அருகில் அமைந்துள்ளது.", mapQuery: "Arapaleeswarar Temple Kolli Hills", mapUrl: "https://maps.google.com/?q=Arapaleeswarar+Temple+Kolli+Hills+(Namakkal+District)" },
+                        { name: "Anjaneyar Temple", location: "Namakkal Fort", desc: "18 அடி உயர பிரம்மாண்ட ஒற்றைக்கல் ஆஞ்சநேயர், நரசிம்மரை வணங்கும் கோலத்தில் அருள்பாலிக்கிறார்.", mapQuery: "Anjaneyar Temple Namakkal Fort", mapUrl: "https://maps.google.com/?q=Anjaneyar+Temple+Namakkal+Fort" },
+                        { name: "Pasupatheswarar Temple", location: "Karur", desc: "காமதேனு வழிபட்ட சிறப்புமிக்க தலம். இங்குள்ள மூலவர் லிங்கம் ஐந்தடி உயரம் கொண்டது.", mapQuery: "Pasupatheswarar Temple Karur", mapUrl: "https://maps.google.com/?q=Pasupatheswarar+Temple+Karur" },
+                        { name: "Kailasanathar Temple", location: "Tharamangalam (Salem)", desc: "வியக்கவைக்கும் சிற்பக்கலை மற்றும் கட்டடக்கலை அதிசயங்கள் நிறைந்த 10ம் நூற்றாண்டு சோழர் கால கோவில்.", mapQuery: "Kailasanathar Temple Tharamangalam Salem", mapUrl: "https://maps.google.com/?q=Kailasanathar+Temple+Tharamangalam+(Salem)" },
+                        { name: "Sugavaneswarar Temple", location: "Salem", desc: "சுகப்பிரம்ம ரிஷியால் வணங்கப்பட்ட பழமையான சிவன் கோவில். அருணகிரிநாதரால் பாடல் பெற்ற தலம்.", mapQuery: "Sugavaneswarar Temple Salem", mapUrl: "https://maps.google.com/?q=Sugavaneswarar+Temple+Salem" },
+                        { name: "Kottai Mariamman Temple", location: "Salem", desc: "சேலம் மாநகரின் காவல் தெய்வமாக விளங்கும் சக்தி வாய்ந்த அம்மன். ஆடி மாத திருவிழா மிகவும் பிரசித்தி பெற்றது.", mapQuery: "Kottai Mariamman Temple Salem", mapUrl: "https://maps.google.com/?q=Kottai+Mariamman+Temple+Salem" },
+                        { name: "Arunachaleswarar Temple", location: "Tiruvannamalai", desc: "பஞ்சபூதத் தலங்களில் அக்னியைக் குறிக்கும் தலம்; நினைத்தாலே முக்தி தரும் தலம் எனப் போற்றப்படுகிறது.", mapQuery: "Arunachaleswarar Temple Tiruvannamalai", mapUrl: "https://maps.google.com/?q=Arunachaleswarar+Temple+Tiruvannamalai" },
+                        { name: "Pachaiamman Temple", location: "Girivalam Path", desc: "கிரிவலப் பாதையில் அமைந்துள்ள இக்கோவில், சிவனின் தவத்திற்கு பார்வதி தேவி உதவிய இடமாகக் கருதப்படுகிறது.", mapQuery: "Pachaiamman Temple Girivalam Path", mapUrl: "https://maps.google.com/?q=Pachaiamman+Temple+Girivalam+Path" },
+                        { name: "Adi Annamalai Temple", location: "Tiruvannamalai outskirts", desc: "கிரிவலப் பாதையில் உள்ள இக்கோவில், அண்ணாமலையார் கோவிலை விடப் பழமையானது எனக் கருதப்படுகிறது.", mapQuery: "Adi Annamalai Temple Tiruvannamalai outskirts", mapUrl: "https://maps.google.com/?q=Adi+Annamalai+Temple+Tiruvannamalai+outskirts" },
+                        { name: "Sripuram Golden Temple", location: "Vellore (Tirumalaikodi)", desc: "சுமார் 1500 கிலோ தங்கத்தால் வேயப்பட்ட விமானம் மற்றும் கோபுரம்; ஆன்மிகப் பயணத்தைக் குறிக்கும் நட்சத்திர வடிவ நடைபாதை.", mapQuery: "Sripuram Golden Temple Vellore", mapUrl: "https://maps.google.com/?q=Sripuram+Golden+Temple+Vellore+(Tirumalaikodi)" },
+                        { name: "Jalakandeswarar Temple", location: "Inside Vellore Fort", desc: "வேலூர் கோட்டையின் உள்ளே, அகழிக்கு நடுவே அமைந்துள்ள விஜயநகரப் பேரரசின் சிற்பக்கலைக்குச் சிறந்த எடுத்துக்காட்டு.", mapQuery: "Jalakandeswarar Temple Inside Vellore Fort", mapUrl: "https://maps.google.com/?q=Jalakandeswarar+Temple+Inside+Vellore+Fort" },
+                        { name: "Srikalahasteeswara Temple", location: "Srikalahasti", desc: "பஞ்சபூத தலங்களில் வாயுவைக் குறிக்கும் தலம். ராகு-கேது தோஷ நிவர்த்திக்கு மிகவும் பிரசித்தி பெற்றது.", mapQuery: "Srikalahasteeswara Temple Srikalahasti", mapUrl: "https://maps.google.com/?q=Srikalahasteeswara+Temple+Srikalahasti" },
+                        { name: "Padmavathi Ammavari Temple", location: "Tiruchanur", desc: "திருமலைக்குச் செல்லும் முன் வெங்கடேஸ்வரரின் துணைவியாரான பத்மாவதி தாயாரை தரிசிப்பது மரபு.", mapQuery: "Padmavathi Ammavari Temple Tiruchanur", mapUrl: "https://maps.google.com/?q=Padmavathi+Ammavari+Temple+Tiruchanur" },
+                        { name: "Venkateswara Swamy Temple", location: "Tirumala Hills", desc: "நமது பயணத்தின் இலக்கு. கலியுகத்தில் மோட்சம் தரும் தெய்வமாக வணங்கப்படும் ஸ்ரீனிவாசரை தரிசிப்பது பெரும் பாக்கியம்.", mapQuery: "Venkateswara Swamy Temple Tirumala Hills", mapUrl: "https://maps.google.com/?q=Venkateswara+Swamy+Temple+Tirumala+Hills" }
                     ];
 
                     const timeline = document.getElementById('timeline-content');
@@ -70,7 +83,7 @@
 
                     temples.forEach((temple, index) => {
                         const timelineItem = document.createElement('div');
-                        timelineItem.className = `mb-8 flex flex-col sm:flex-row items-center w-full max-w-lg mx-auto`; // Centering items for mobile
+                        timelineItem.className = `mb-8 flex flex-col sm:flex-row items-center w-full max-w-lg mx-auto`; 
 
                         const circle = `
                             <div class="z-20 flex-shrink-0 flex items-center bg-amber-500 shadow-xl w-10 h-10 sm:w-12 sm:h-12 rounded-full mb-3 sm:mb-0 sm:mr-4">
@@ -78,24 +91,123 @@
                             </div>`;
                         
                         const card = document.createElement('div');
-                        card.className = `bg-white rounded-lg shadow-xl w-full p-4 sm:p-6 md:hover:scale-105 md:hover:shadow-2xl transition-transform duration-300 text-center sm:text-left`; // Align text for mobile
+                        card.className = `bg-white rounded-lg shadow-xl w-full p-4 sm:p-6 md:hover:scale-105 md:hover:shadow-2xl transition-all duration-300 text-center sm:text-left temple-card plan-included`;
+                        card.dataset.index = index;
+                        card.dataset.status = 'included';
                         card.innerHTML = `
                             <h2 class="font-bold text-lg sm:text-xl text-orange-800 mb-2">${temple.name}</h2>
                             <p class="text-sm font-semibold mb-2">இடம்: ${temple.location}</p>
                             <p class="text-sm leading-relaxed">${temple.desc}</p>
                         `;
 
+                        const controls = document.createElement('div');
+                        controls.className = 'mt-4 flex flex-wrap justify-center sm:justify-start items-center gap-x-6 gap-y-2';
+                        
                         const mapButton = buttonTemplate.cloneNode(true);
                         mapButton.querySelector('a').href = temple.mapUrl;
-                        card.appendChild(mapButton);
+
+                        const planToggleContainer = document.createElement('div');
+                        planToggleContainer.className = 'flex items-center space-x-2';
+                        planToggleContainer.innerHTML = `
+                            <button title="பயணத்தில் சேர்" class="plan-toggle-btn p-1.5 rounded-full bg-green-500 text-white" data-action="include">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            </button>
+                            <button title="பயணத்திலிருந்து நீக்கு" class="plan-toggle-btn p-1.5 rounded-full bg-gray-300 hover:bg-red-500 text-gray-600 hover:text-white transition-colors" data-action="exclude">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                            </button>
+                        `;
                         
-                        // For mobile, stack circle and card vertically
-                        // For larger screens, they are side-by-side with text alignment adjustments
+                        const visitedLabel = document.createElement('label');
+                        visitedLabel.className = "flex items-center space-x-2 text-sm cursor-pointer";
+                        visitedLabel.innerHTML = `<input type="checkbox" class="visited-checkbox h-5 w-5 rounded text-green-600 focus:ring-green-500 border-gray-300"><span>பார்த்தாயிற்று</span>`;
+
+                        controls.appendChild(mapButton);
+                        controls.appendChild(planToggleContainer);
+                        controls.appendChild(visitedLabel);
+                        card.appendChild(controls);
+
                         timelineItem.innerHTML = circle;
                         timelineItem.appendChild(card);
-                        
                         timeline.appendChild(timelineItem);
                     });
+
+                    // Event Listeners
+                    document.getElementById('make-plan-btn').addEventListener('click', () => {
+                        const selectedQueries = [];
+                        document.querySelectorAll('.temple-card[data-status="included"]').forEach(card => {
+                            selectedQueries.push(temples[card.dataset.index].mapQuery);
+                        });
+
+                        if (selectedQueries.length < 2) {
+                            alert("பயணத் திட்டத்தை உருவாக்க குறைந்தது இரண்டு கோவில்களைத் தேர்ந்தெடுக்கவும்.");
+                            return;
+                        }
+
+                        const baseUrl = "https://www.google.com/maps/dir/";
+                        const origin = "Coimbatore";
+                        const fullUrl = baseUrl + encodeURIComponent(origin) + "/" + selectedQueries.map(q => encodeURIComponent(q)).join('/');
+                        window.open(fullUrl, '_blank');
+                    });
+
+                    document.getElementById('reset-btn').addEventListener('click', () => {
+                        document.querySelectorAll('.temple-card').forEach(card => {
+                            card.dataset.status = 'included';
+                            card.classList.add('plan-included');
+                            card.classList.remove('plan-excluded');
+
+                            const includeBtn = card.querySelector('.plan-toggle-btn[data-action="include"]');
+                            const excludeBtn = card.querySelector('.plan-toggle-btn[data-action="exclude"]');
+                            includeBtn.classList.remove('bg-gray-300', 'text-gray-600', 'hover:bg-green-500');
+                            includeBtn.classList.add('bg-green-500', 'text-white');
+                            excludeBtn.classList.remove('bg-red-500', 'text-white');
+                            excludeBtn.classList.add('bg-gray-300', 'text-gray-600', 'hover:bg-red-500');
+                            
+                            card.classList.remove('visited-card');
+                            card.querySelector('.visited-checkbox').checked = false;
+                        });
+                    });
+                    
+                    timeline.addEventListener('click', (event) => {
+                        const btn = event.target.closest('.plan-toggle-btn');
+                        if (btn) {
+                            const card = btn.closest('.temple-card');
+                            const action = btn.dataset.action;
+                            const includeBtn = card.querySelector('.plan-toggle-btn[data-action="include"]');
+                            const excludeBtn = card.querySelector('.plan-toggle-btn[data-action="exclude"]');
+
+                            if (action === 'include') {
+                                card.dataset.status = 'included';
+                                card.classList.add('plan-included');
+                                card.classList.remove('plan-excluded');
+                                
+                                includeBtn.classList.remove('bg-gray-300', 'text-gray-600', 'hover:bg-green-500');
+                                includeBtn.classList.add('bg-green-500', 'text-white');
+                                excludeBtn.classList.remove('bg-red-500', 'text-white');
+                                excludeBtn.classList.add('bg-gray-300', 'text-gray-600', 'hover:bg-red-500');
+                            } else { // exclude
+                                card.dataset.status = 'excluded';
+                                card.classList.add('plan-excluded');
+                                card.classList.remove('plan-included');
+                                
+                                excludeBtn.classList.remove('bg-gray-300', 'text-gray-600', 'hover:bg-red-500');
+                                excludeBtn.classList.add('bg-red-500', 'text-white');
+                                includeBtn.classList.remove('bg-green-500', 'text-white');
+                                includeBtn.classList.add('bg-gray-300', 'text-gray-600', 'hover:bg-green-500');
+                            }
+                        }
+                    });
+                    
+                    timeline.addEventListener('change', (event) => {
+                        if (event.target.classList.contains('visited-checkbox')) {
+                            const card = event.target.closest('.temple-card');
+                            if (event.target.checked) {
+                                card.classList.add('visited-card');
+                            } else {
+                                card.classList.remove('visited-card');
+                            }
+                        }
+                    });
+
                 </script>
 
             </div>
